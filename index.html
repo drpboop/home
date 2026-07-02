@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>work tools</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Century Gothic", Arial, sans-serif;
+      background: #f0f4f8;
+      color: #2c3e50;
+    }
+
+    .site-nav {
+      background: #111;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .site-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    .site-nav a:hover,
+    .site-nav a.active {
+      background: #444;
+    }
+
+    header {
+      text-align: center;
+      padding: 38px 20px 18px;
+    }
+
+    header h1 {
+      margin: 0;
+      text-transform: lowercase;
+    }
+
+    main {
+      width: min(950px, 92%);
+      margin: 15px auto 50px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .tool-card {
+      background: white;
+      padding: 24px 20px;
+      border-radius: 12px;
+      box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.1);
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+      min-height: 175px;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+
+      box-shadow:
+        0 8px 18px
+        rgba(0, 0, 0, 0.14);
+    }
+
+    .tool-icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .tool-card h2 {
+      margin: 0 0 18px;
+      text-transform: lowercase;
+    }
+
+    .tool-button {
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+
+      background: #111;
+      color: white;
+
+      padding: 7px 13px;
+      border-radius: 6px;
+
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .tool-button:hover {
+      background: #444;
+    }
+
+    .coming-soon {
+      border: 2px dashed #b2bec3;
+      box-shadow: none;
+    }
+
+    .coming-soon .tool-button {
+      background: #b2bec3;
+      cursor: default;
+    }
+
+    .date-card {
+      max-width: 500px;
+      margin: 25px auto 0;
+
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+
+      text-align: center;
+
+      box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.1);
+    }
+
+    .date-card h2 {
+      margin: 0 0 10px;
+      text-transform: lowercase;
+    }
+
+    .future-date {
+      font-size: 1.55rem;
+      font-weight: bold;
+      color: #0984e3;
+    }
+
+    .today-date {
+      color: #636e72;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #636e72;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 550px) {
+      header {
+        padding-top: 28px;
+      }
+
+      .tool-card {
+        min-height: 160px;
+      }
+
+      .future-date {
+        font-size: 1.35rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="site-nav">
+
+    <a
+      class="active"
+      href="https://drpboop.github.io/home/"
+    >
+      home
+    </a>
+
+    <a href="https://drpboop.github.io/crit/">
+      critter
+    </a>
+
+    <a href="https://drpboop.github.io/refill-lookback/">
+      refill lookback
+    </a>
+
+  </nav>
+
+  <header>
+    <h1>work tools</h1>
+  </header>
+
+  <main>
+
+    <section class="tool-grid">
+
+      <article class="tool-card">
+
+        <div class="tool-icon">
+          📝
+        </div>
+
+        <h2>critter</h2>
+
+        <a
+          class="tool-button"
+          href="https://drpboop.github.io/crit/"
+        >
+          open
+        </a>
+
+      </article>
+
+      <article class="tool-card">
+
+        <div class="tool-icon">
+          🗓️
+        </div>
+
+        <h2>refill lookback</h2>
+
+        <a
+          class="tool-button"
+          href="https://drpboop.github.io/refill-lookback/"
+        >
+          open
+        </a>
+
+      </article>
+
+      <article class="tool-card coming-soon">
+
+        <div class="tool-icon">
+          ➕
+        </div>
+
+        <h2>new tool</h2>
+
+        <span class="tool-button">
+          soon
+        </span>
+
+      </article>
+
+    </section>
+
+    <section class="date-card">
+
+      <h2>
+        14 days from today
+      </h2>
+
+      <div
+        id="futureDate"
+        class="future-date"
+      >
+        loading...
+      </div>
+
+      <div
+        id="todayDate"
+        class="today-date"
+      ></div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    work tools
+  </footer>
+
+  <script>
+    function formatDate(date) {
+      return date.toLocaleDateString(
+        "en-US",
+        {
+          weekday: "long",
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric"
+        }
+      );
+    }
+
+    function updateDates() {
+      const today = new Date();
+
+      const futureDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+
+      futureDate.setDate(
+        futureDate.getDate() + 14
+      );
+
+      document
+        .getElementById("futureDate")
+        .textContent =
+          formatDate(futureDate);
+
+      document
+        .getElementById("todayDate")
+        .textContent =
+          "today: " + formatDate(today);
+    }
+
+    updateDates();
+  </script>
+
+</body>
+</html>
