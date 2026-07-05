@@ -1,128 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>work tools</title>
-<style>
+  <meta charset="UTF-8">
 
-:root{
-  --bg:#050505;
-  --panel:#111111;
-  --panel-2:#181818;
-  --border:#3b3218;
-  --white:#ffffff;
-  --yellow:#ffd84d;
-  --mustard:#c99a24;
-  --mustard-dark:#8f6814;
-  --muted:#cfcfcf;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  font-family:"Century Gothic",Arial,sans-serif;
-  background:var(--bg);
-  color:var(--white);
-}
-.site-nav{
-  background:#0d0d0d;
-  padding:10px 16px;
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:6px;
-  border-bottom:1px solid var(--border);
-}
-.site-nav a{
-  color:var(--white);
-  text-decoration:none;
-  padding:7px 10px;
-  border-radius:6px;
-  font-size:.9rem;
-}
-.site-nav a:hover{background:#2a2414;color:var(--yellow)}
-.site-nav a.active{background:var(--mustard-dark);color:var(--white)}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-header{text-align:center;padding:34px 20px 16px}
-header h1{margin:0;color:var(--mustard);font-size:2rem}
-main{width:min(950px,92%);margin:15px auto 45px}
-.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-.tool-card{
-  min-height:165px;padding:24px 18px;background:var(--panel);
-  border:1px solid var(--border);border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.5);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;transition:.2s
-}
-.tool-card:hover{transform:translateY(-3px);border-color:var(--mustard)}
-.tool-icon{margin-bottom:9px;font-size:2.2rem;color:var(--mustard);line-height:1}
-.tool-card h2{margin:0 0 16px;color:var(--yellow);font-size:1.15rem}
-.tool-button{
-  display:inline-block;padding:6px 11px;background:var(--mustard-dark);
-  color:var(--white);border-radius:6px;text-decoration:none;font-size:.8rem;font-weight:bold
-}
-.tool-button:hover{background:var(--mustard)}
-.date-card{
-  max-width:480px;margin:24px auto 0;padding:20px;background:var(--panel);
-  border:1px solid var(--border);border-radius:12px;text-align:center
-}
-.date-card h2{margin:0 0 10px;color:var(--yellow);font-size:1.2rem}
-.future-date{color:var(--mustard);font-size:1.45rem;font-weight:bold}
-.today-date{margin-top:9px;color:var(--white);font-size:.85rem}
-footer{padding:18px;color:var(--muted);text-align:center;font-size:.8rem}
-@media(max-width:550px){header{padding-top:26px}header h1{font-size:1.65rem}.tool-card{min-height:150px}}
-</style>
+  <title>work tools</title>
+
+  <style>
+    :root {
+      --black: #050505;
+      --panel: #111111;
+      --panel-hover: #181818;
+      --white: #ffffff;
+      --yellow: #ffd84d;
+      --mustard: #c99a24;
+      --mustard-dark: #8f6814;
+      --border: #4b3a16;
+      --muted: #cfcfcf;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family:
+        "Century Gothic",
+        Arial,
+        sans-serif;
+    }
+
+    .site-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+
+      padding: 10px 16px;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-nav a {
+      padding: 7px 10px;
+      border-radius: 6px;
+
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .site-nav a:hover {
+      background: #2a2414;
+      color: var(--yellow);
+    }
+
+    .site-nav a.active {
+      background: var(--mustard-dark);
+      color: var(--white);
+    }
+
+    header {
+      padding: 34px 20px 16px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      color: var(--mustard);
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    main {
+      width: 92%;
+      max-width: 950px;
+      margin: 15px auto 45px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+
+    .tool-card {
+      min-height: 165px;
+      padding: 24px 18px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+
+      box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.5);
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      background: var(--panel-hover);
+      border-color: var(--mustard);
+    }
+
+    .tool-icon {
+      margin-bottom: 10px;
+      color: var(--mustard);
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .tool-card h2 {
+      margin: 0 0 16px;
+      color: var(--yellow);
+      font-size: 1.15rem;
+    }
+
+    .tool-button {
+      display: inline-block;
+      padding: 6px 11px;
+
+      background: var(--mustard-dark);
+      color: var(--white);
+      border-radius: 6px;
+
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .tool-button:hover {
+      background: var(--mustard);
+    }
+
+    .date-card {
+      max-width: 480px;
+      margin: 24px auto 0;
+      padding: 20px;
+
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+
+      box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.5);
+    }
+
+    .date-card h2 {
+      margin: 0 0 10px;
+      color: var(--yellow);
+      font-size: 1.2rem;
+    }
+
+    .future-date {
+      color: var(--mustard);
+      font-size: 1.45rem;
+      font-weight: bold;
+    }
+
+    .today-date {
+      margin-top: 9px;
+      color: var(--white);
+      font-size: 0.85rem;
+    }
+
+    footer {
+      padding: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 550px) {
+      header {
+        padding-top: 26px;
+      }
+
+      header h1 {
+        font-size: 1.65rem;
+      }
+
+      .tool-card {
+        min-height: 150px;
+      }
+
+      .future-date {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<nav class="site-nav">
-<a class="active" href="https://drpboop.github.io/home/">home</a>
-<a href="https://drpboop.github.io/crit/">critter</a>
-<a href="https://drpboop.github.io/refill-lookback/">refill lookback</a>
-<a href="https://drpboop.github.io/situational/">situational</a>
-</nav>
 
-<header><h1>work tools</h1></header>
+  <nav class="site-nav">
 
-<main>
-<section class="tool-grid">
-<article class="tool-card">
-<div class="tool-icon">✎</div>
-<h2>critter</h2>
-<a class="tool-button" href="https://drpboop.github.io/crit/">open</a>
-</article>
+    <a
+      class="active"
+      href="/home/"
+    >
+      home
+    </a>
 
-<article class="tool-card">
-<div class="tool-icon">▦</div>
-<h2>refill lookback</h2>
-<a class="tool-button" href="https://drpboop.github.io/refill-lookback/">open</a>
-</article>
+    <a href="/crit/">
+      critter
+    </a>
 
-<article class="tool-card">
-<div class="tool-icon">✦</div>
-<h2>situational</h2>
-<a class="tool-button" href="https://drpboop.github.io/situational/">open</a>
-</article>
-</section>
+    <a href="/refill-lookback/">
+      refill lookback
+    </a>
 
-<section class="date-card">
-<h2>14 days from today</h2>
-<div id="futureDate" class="future-date">loading...</div>
-<div id="todayDate" class="today-date"></div>
-</section>
-</main>
+    <a href="/situational/">
+      situational
+    </a>
 
-<footer>work tools</footer>
+  </nav>
 
-<script>
-function formatDate(date){
-  return date.toLocaleDateString("en-US",{weekday:"long",month:"2-digit",day:"2-digit",year:"numeric"}).toLowerCase();
-}
-const today=new Date();
-const future=new Date(today.getFullYear(),today.getMonth(),today.getDate());
-future.setDate(future.getDate()+14);
-document.getElementById("futureDate").textContent=formatDate(future);
-document.getElementById("todayDate").textContent="today: "+formatDate(today);
-</script>
+  <header>
+    <h1>work tools</h1>
+  </header>
+
+  <main>
+
+    <section class="tool-grid">
+
+      <article class="tool-card">
+
+        <div class="tool-icon">
+          ✎
+        </div>
+
+        <h2>critter</h2>
+
+        <a
+          class="tool-button"
+          href="/crit/"
+        >
+          open
+        </a>
+
+      </article>
+
+      <article class="tool-card">
+
+        <div class="tool-icon">
+          ▦
+        </div>
+
+        <h2>refill lookback</h2>
+
+        <a
+          class="tool-button"
+          href="/refill-lookback/"
+        >
+          open
+        </a>
+
+      </article>
+
+      <article class="tool-card">
+
+        <div class="tool-icon">
+          ✦
+        </div>
+
+        <h2>situational</h2>
+
+        <a
+          class="tool-button"
+          href="/situational/"
+        >
+          open
+        </a>
+
+      </article>
+
+    </section>
+
+    <section class="date-card">
+
+      <h2>
+        14 days from today
+      </h2>
+
+      <div
+        id="futureDate"
+        class="future-date"
+      >
+        loading...
+      </div>
+
+      <div
+        id="todayDate"
+        class="today-date"
+      ></div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    work tools
+  </footer>
+
+  <script>
+    function formatDate(date) {
+      return date
+        .toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long",
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric"
+          }
+        )
+        .toLowerCase();
+    }
+
+    function displayDates() {
+      const today = new Date();
+
+      const futureDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+
+      futureDate.setDate(
+        futureDate.getDate() + 14
+      );
+
+      document
+        .getElementById("futureDate")
+        .textContent =
+          formatDate(futureDate);
+
+      document
+        .getElementById("todayDate")
+        .textContent =
+          "today: " +
+          formatDate(today);
+    }
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      displayDates
+    );
+  </script>
+
 </body>
 </html>
