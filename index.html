@@ -25,18 +25,19 @@
 
     .site-nav {
       background: #111;
-      padding: 12px 20px;
+      padding: 10px 16px;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
     .site-nav a {
       color: white;
       text-decoration: none;
-      padding: 8px 12px;
+      padding: 7px 10px;
       border-radius: 6px;
+      font-size: 0.9rem;
     }
 
     .site-nav a:hover,
@@ -46,33 +47,36 @@
 
     header {
       text-align: center;
-      padding: 38px 20px 18px;
+      padding: 34px 20px 16px;
     }
 
     header h1 {
       margin: 0;
       text-transform: lowercase;
+      font-size: 2rem;
     }
 
     main {
-      width: min(950px, 92%);
-      margin: 15px auto 50px;
+      width: min(900px, 92%);
+      margin: 15px auto 45px;
     }
 
     .tool-grid {
       display: grid;
       grid-template-columns:
-        repeat(auto-fit, minmax(230px, 1fr));
+        repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
     }
 
     .tool-card {
       background: white;
-      padding: 24px 20px;
+      padding: 24px 18px;
       border-radius: 12px;
       box-shadow:
         0 4px 12px
         rgba(0, 0, 0, 0.1);
+
+      min-height: 165px;
 
       display: flex;
       flex-direction: column;
@@ -80,7 +84,6 @@
       justify-content: center;
 
       text-align: center;
-      min-height: 175px;
 
       transition:
         transform 0.2s ease,
@@ -88,35 +91,34 @@
     }
 
     .tool-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px);
 
       box-shadow:
-        0 8px 18px
+        0 7px 16px
         rgba(0, 0, 0, 0.14);
     }
 
     .tool-icon {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      font-size: 2.1rem;
+      margin-bottom: 9px;
     }
 
     .tool-card h2 {
-      margin: 0 0 18px;
+      margin: 0 0 16px;
       text-transform: lowercase;
+      font-size: 1.15rem;
     }
 
     .tool-button {
       display: inline-block;
-      text-align: center;
       text-decoration: none;
-
       background: #111;
       color: white;
 
-      padding: 7px 13px;
+      padding: 6px 11px;
       border-radius: 6px;
 
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: bold;
     }
 
@@ -135,12 +137,12 @@
     }
 
     .date-card {
-      max-width: 500px;
-      margin: 25px auto 0;
+      max-width: 480px;
+      margin: 24px auto 0;
 
       background: white;
+      padding: 20px;
       border-radius: 12px;
-      padding: 22px;
 
       text-align: center;
 
@@ -152,38 +154,43 @@
     .date-card h2 {
       margin: 0 0 10px;
       text-transform: lowercase;
+      font-size: 1.2rem;
     }
 
     .future-date {
-      font-size: 1.55rem;
+      font-size: 1.45rem;
       font-weight: bold;
       color: #0984e3;
     }
 
     .today-date {
-      color: #636e72;
-      font-size: 0.9rem;
-      margin-top: 10px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
+      margin-top: 9px;
       color: #636e72;
       font-size: 0.85rem;
     }
 
+    footer {
+      text-align: center;
+      padding: 18px;
+      color: #636e72;
+      font-size: 0.8rem;
+    }
+
     @media (max-width: 550px) {
       header {
-        padding-top: 28px;
+        padding-top: 26px;
+      }
+
+      header h1 {
+        font-size: 1.65rem;
       }
 
       .tool-card {
-        min-height: 160px;
+        min-height: 150px;
       }
 
       .future-date {
-        font-size: 1.35rem;
+        font-size: 1.25rem;
       }
     }
   </style>
