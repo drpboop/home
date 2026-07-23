@@ -1,1044 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>critter</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>work tools</title>
 
-<style>
-:root{
-  --black:#050505;
-  --panel:#111111;
-  --panel2:#181818;
-  --white:#ffffff;
-  --yellow:#ffd84d;
-  --mustard:#c99a24;
-  --mustardDark:#8f6814;
-  --border:#4b3a16;
-  --muted:#cfcfcf;
-  --danger:#7a1f1f;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  background:var(--black);
-  color:var(--white);
-  font-family:"Century Gothic",Arial,sans-serif;
-}
-.site-nav{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:6px;
-  padding:10px 16px;
-  background:#0d0d0d;
-  border-bottom:1px solid var(--border);
-}
-.site-nav a{
-  padding:7px 10px;
-  border-radius:6px;
-  color:var(--white);
-  text-decoration:none;
-  font-size:.9rem;
-}
-.site-nav a:hover{
-  background:#2a2414;
-  color:var(--yellow);
-}
-.site-nav a.active{
-  background:var(--mustardDark);
-  color:var(--white);
-}
-.page{
-  padding:20px;
-}
-.container{
-  max-width:660px;
-  margin:auto;
-  padding:22px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.5);
-}
-h1{
-  margin:0 0 18px;
-  color:var(--mustard);
-  text-align:center;
-  font-size:2rem;
-}
-h2{
-  margin:0 0 14px;
-  color:var(--yellow);
-  text-align:center;
-  font-size:1.25rem;
-}
-h3{
-  color:var(--yellow);
-  text-align:center;
-}
-label{
-  display:block;
-  margin-top:10px;
-  color:var(--yellow);
-  font-weight:600;
-}
-input,
-select,
-textarea{
-  width:100%;
-  margin-top:5px;
-  padding:10px;
-  background:#222;
-  color:var(--white);
-  border:1px solid #655522;
-  border-radius:7px;
-  font-family:inherit;
-  font-size:.95rem;
-}
-textarea{
-  min-height:82px;
-  resize:vertical;
-}
-.section{
-  display:none;
-  margin-top:16px;
-  padding:16px;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:12px;
-}
-.section.active{
-  display:block;
-}
-.selector-card{
-  padding:14px;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:12px;
-}
-.transfer-fields{
-  display:none;
-  margin-top:14px;
-  padding:12px;
-  background:#121212;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-.transfer-fields.active{
-  display:block;
-}
-.buttons{
-  margin-top:15px;
-  text-align:center;
-}
-button{
-  padding:8px 14px;
-  margin:5px;
-  background:var(--mustardDark);
-  color:var(--white);
-  border:0;
-  border-radius:6px;
-  cursor:pointer;
-  font-family:inherit;
-  font-size:.9rem;
-}
-button:hover{
-  background:var(--mustard);
-}
-button.secondary{
-  background:#333;
-}
-button.secondary:hover{
-  background:#555;
-}
-button.danger{
-  background:var(--danger);
-}
-button.danger:hover{
-  background:#9f2a2a;
-}
-button.small{
-  padding:5px 9px;
-  margin:2px;
-  font-size:.8rem;
-}
-.output{
-  margin-top:16px;
-}
-.output textarea{
-  min-height:110px;
-}
-.status{
-  min-height:22px;
-  margin-top:10px;
-  color:var(--mustard);
-  text-align:center;
-  font-size:.9rem;
-}
-.log-card{
-  margin-top:24px;
-  padding-top:18px;
-  border-top:1px solid var(--border);
-}
-.log-count{
-  color:var(--muted);
-  text-align:center;
-  font-size:.9rem;
-}
-.table-wrap{
-  margin-top:14px;
-  overflow:auto;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-table{
-  width:100%;
-  min-width:720px;
-  border-collapse:collapse;
-}
-th,
-td{
-  padding:9px;
-  border-bottom:1px solid #3b3218;
-  text-align:left;
-  vertical-align:top;
-  font-size:.85rem;
-}
-th{
-  background:#211c0d;
-  color:var(--yellow);
-}
-td{
-  background:#121212;
-  color:var(--white);
-}
-td.actions{
-  white-space:nowrap;
-  text-align:center;
-}
-.empty{
-  padding:16px;
-  color:var(--muted);
-  text-align:center;
-}
-@media(max-width:650px){
-  .page{padding:12px}
-  .container{padding:18px}
-  h1{font-size:1.65rem}
-}
-</style>
+  <style>
+    :root {
+      --black: #050505;
+      --panel: #111111;
+      --panel-hover: #181818;
+      --white: #ffffff;
+      --yellow: #ffd84d;
+      --mustard: #c99a24;
+      --border: #4b3a16;
+      --muted: #cfcfcf;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: "Century Gothic", Arial, sans-serif;
+    }
+
+    header {
+      padding: 38px 20px 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      color: var(--mustard);
+      font-size: 2rem;
+    }
+
+    main {
+      width: 92%;
+      max-width: 950px;
+      margin: 15px auto 45px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+
+    .tool-card {
+      min-height: 165px;
+      padding: 24px 18px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--white);
+
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .tool-card:hover,
+    .tool-card:focus {
+      transform: translateY(-4px);
+      background: var(--panel-hover);
+      border-color: var(--mustard);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.65);
+      outline: none;
+    }
+
+    .tool-card:active {
+      transform: translateY(-1px);
+    }
+
+    .tool-icon {
+      margin-bottom: 10px;
+      color: var(--mustard);
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .tool-card h2 {
+      margin: 0;
+      color: var(--yellow);
+      font-size: 1.15rem;
+    }
+
+    .date-card {
+      max-width: 480px;
+      margin: 24px auto 0;
+      padding: 20px;
+
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .date-card h2 {
+      margin: 0 0 10px;
+      color: var(--yellow);
+      font-size: 1.2rem;
+    }
+
+    .future-date {
+      color: var(--mustard);
+      font-size: 1.45rem;
+      font-weight: bold;
+    }
+
+    .today-date {
+      margin-top: 9px;
+      color: var(--white);
+      font-size: 0.85rem;
+    }
+
+    footer {
+      padding: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 550px) {
+      header {
+        padding-top: 28px;
+      }
+
+      header h1 {
+        font-size: 1.65rem;
+      }
+
+      .tool-card {
+        min-height: 150px;
+      }
+
+      .future-date {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<nav class="site-nav">
-  <a href="https://drpboop.github.io/home/">home</a>
-  <a class="active" href="https://drpboop.github.io/crit/">critter</a>
-  <a href="https://drpboop.github.io/refill-lookback/">refill lookback</a>
-  <a href="https://drpboop.github.io/situational/">situational</a>
-  <a href="https://drpboop.github.io/status-log/">status log</a>
-</nav>
+  <header>
+    <h1>work tools</h1>
+  </header>
 
-<div class="page">
-<div class="container">
+  <main>
 
-<h1>critter</h1>
+    <section class="tool-grid">
 
-<section class="selector-card">
-  <label for="formType">form type</label>
-  <select id="formType">
-    <option value="">-- select --</option>
-    <option value="crit">crit</option>
-    <option value="provider">provider</option>
-  </select>
-</section>
+      <a
+        class="tool-card"
+        href="https://drpboop.github.io/crit/"
+        aria-label="open critter"
+      >
+        <div class="tool-icon">✎</div>
+        <h2>critter</h2>
+      </a>
 
-<section id="critSection" class="section">
-  <h2>crit</h2>
+      <a
+        class="tool-card"
+        href="https://drpboop.github.io/refill-lookback/"
+        aria-label="open refill lookback"
+      >
+        <div class="tool-icon">▦</div>
+        <h2>refill lookback</h2>
+      </a>
 
-  <label for="c_id">agt id</label>
-  <input id="c_id" class="persist" type="text">
+      <a
+        class="tool-card"
+        href="https://drpboop.github.io/situational/"
+        aria-label="open situational"
+      >
+        <div class="tool-icon">✦</div>
+        <h2>situational</h2>
+      </a>
 
-  <label for="c_mbr_pa">mbr id / pa#</label>
-  <input id="c_mbr_pa" class="persist" type="text">
+    </section>
 
-  <label for="c_rx">rx</label>
-  <input id="c_rx" class="persist" type="text">
+    <section class="date-card">
 
-  <label for="c_res_type">res type</label>
-  <select id="c_res_type" class="persist">
-    <option value="">-- select res type --</option>
-    <option value="pa update">pa update</option>
-    <option value="form change">form change</option>
-    <option value="transfer">transfer</option>
-    <option value="call">call</option>
-    <option value="other">other</option>
-  </select>
+      <h2>14 days from today</h2>
 
-  <label for="c_res_specific">specific res</label>
-  <select id="c_res_specific" class="persist">
-    <option value="">-- select specific res --</option>
-  </select>
+      <div
+        id="futureDate"
+        class="future-date"
+      >
+        loading...
+      </div>
 
-  <label for="c_res">resolution</label>
-  <textarea id="c_res" class="persist"></textarea>
-</section>
+      <div
+        id="todayDate"
+        class="today-date"
+      ></div>
 
-<section id="providerSection" class="section">
-  <h2>provider</h2>
+    </section>
 
-  <label for="p_name">name</label>
-  <input id="p_name" class="persist" type="text">
+  </main>
 
-  <label for="p_title">job title</label>
-  <input id="p_title" class="persist" type="text">
+  <footer>
+    work tools
+  </footer>
 
-  <label for="p_npi">npi#</label>
-  <input id="p_npi" class="persist" type="text">
-
-  <label for="p_cb">cb#</label>
-  <input id="p_cb" class="persist" type="text">
-
-  <label for="p_fax">fax#</label>
-  <input id="p_fax" class="persist" type="text">
-
-  <label for="p_mbr_pa">mbr id / pa#</label>
-  <input id="p_mbr_pa" class="persist" type="text">
-
-  <label for="p_rx">rx</label>
-  <input id="p_rx" class="persist" type="text">
-
-  <label for="p_quick">res</label>
-  <select id="p_quick" class="persist">
-    <option value="">-- select --</option>
-    <option value="verbal">verbal pa request</option>
-    <option value="xfer">xfer</option>
-  </select>
-
-  <div id="providerTransferFields" class="transfer-fields">
-    <label for="p_xfer_reason">xfer reason</label>
-    <select id="p_xfer_reason" class="persist">
-      <option value="">-- select --</option>
-      <option value="pa">pa</option>
-      <option value="appeal">appeal</option>
-      <option value="request p2p">request p2p</option>
-      <option value="go over denial">go over denial</option>
-    </select>
-
-    <label for="p_xfer_to">xferred to</label>
-    <input id="p_xfer_to" class="persist" type="text">
-  </div>
-
-  <label for="p_res">resolution</label>
-  <textarea id="p_res" class="persist"></textarea>
-</section>
-
-<div class="buttons">
-  <button onclick="createNote()">create</button>
-  <button class="secondary" onclick="clearOutput()">clear</button>
-</div>
-
-<div id="output" class="output"></div>
-
-<div class="buttons">
-  <button class="secondary" onclick="resetForm()">reset</button>
-</div>
-
-<div id="statusMessage" class="status"></div>
-
-<section class="log-card">
-  <h3>activity log</h3>
-
-  <div id="logCount" class="log-count">
-    0 saved entries
-  </div>
-
-  <div class="buttons">
-    <button onclick="viewLog()">view</button>
-    <button onclick="popCSV()">pop</button>
-    <button class="danger" onclick="clearLog()">clear log</button>
-  </div>
-
-  <div id="logArea" class="table-wrap">
-    <div class="empty">no saved entries</div>
-  </div>
-</section>
-
-</div>
-</div>
-
-<script>
-const stateKey = "critterFormState";
-const logKey = "critterActivityLog";
-
-let activityLog = [];
-
-const critResOptions = {
-  "pa update": [
-    {
-      label: "dating",
-      text: "updated pa detailing on file to reflect dating approved by rph"
-    },
-    {
-      label: "strength",
-      text: "updated pa detailing on file to reflect strength approved by rph"
-    },
-    {
-      label: "drug",
-      text: "updated pa detailing on file to reflect drug approved by rph"
-    },
-    {
-      label: "quantity",
-      text: "updated pa on file to reflect quantity approved by rph"
-    },
-    {
-      label: "high dollar",
-      text: "updated pa detailing on file for high dollar on approved medication"
-    },
-    {
-      label: "backdated",
-      text: "backdated to mm/dd/yyyy per request"
-    },
-    {
-      label: "missing pa",
-      text: "added pa as it was not added when case was approved"
-    },
-    {
-      label: "rx restrictions",
-      text: "updated rx restrictions and claims paid"
-    },
-    {
-      label: "extended loading",
-      text: "extended loading dose pa by 2 weeks per pharmacy request"
+  <script>
+    function formatDate(date) {
+      return date
+        .toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long",
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric"
+          }
+        )
+        .toLowerCase();
     }
-  ],
 
-  "form change": [
-    {
-      label: "pens to syringe",
-      text: "updated from pens to syringe per request"
-    },
-    {
-      label: "syringe to pens",
-      text: "updated from syringe to pens per request"
-    },
-    {
-      label: "multidose to vials",
-      text: "updated from multidose bottle to single-use vials per request"
+    function displayDates() {
+      const today = new Date();
+
+      const futureDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+
+      futureDate.setDate(
+        futureDate.getDate() + 14
+      );
+
+      document
+        .getElementById("futureDate")
+        .textContent = formatDate(futureDate);
+
+      document
+        .getElementById("todayDate")
+        .textContent = "today: " + formatDate(today);
     }
-  ],
 
-  "transfer": [
-    {
-      label: "same plan transfer",
-      text: "transferred from previous account same type of plan and um review"
-    },
-    {
-      label: "not transferable",
-      text: "pa cannot be transferred . new pa required"
-    },
-    {
-      label: "xfer",
-      text: "xfer to correct lob"
-    }
-  ],
-
-  "call": [
-    {
-      label: "denial call",
-      text: "called to go over denial . reviewed next steps"
-    },
-    {
-      label: "approval call",
-      text: "called to go over approval . provided approval information"
-    },
-    {
-      label: "ssa redirect",
-      text: "advised clinical review cannot assist . referred to ssa"
-    }
-  ],
-
-  "other": [
-    {
-      label: "custom",
-      text: ""
-    }
-  ]
-};
-
-function joinParts(parts) {
-  return parts
-    .map(function(part) {
-      return String(part || "").trim();
-    })
-    .filter(Boolean)
-    .join(" . ");
-}
-
-function saveFormState() {
-  const state = {
-    formType: document.getElementById("formType").value,
-    values: {},
-    output: document.getElementById("generatedText")
-      ? document.getElementById("generatedText").value
-      : ""
-  };
-
-  document.querySelectorAll(".persist").forEach(function(el) {
-    state.values[el.id] = el.value;
-  });
-
-  localStorage.setItem(
-    stateKey,
-    JSON.stringify(state)
-  );
-}
-
-function restoreFormState() {
-  const state = JSON.parse(
-    localStorage.getItem(stateKey) || "null"
-  );
-
-  if (!state) {
-    return;
-  }
-
-  document.getElementById("formType").value =
-    state.formType || "";
-
-  Object.keys(state.values || {}).forEach(function(id) {
-    const el = document.getElementById(id);
-
-    if (el) {
-      el.value = state.values[id];
-    }
-  });
-
-  showSelectedForm(false);
-  loadSpecificResOptions(false);
-  updateProviderTransfer(false);
-
-  if (state.output) {
-    showOutput(state.output);
-  }
-}
-
-function showSelectedForm(shouldSave = true) {
-  const type = document.getElementById("formType").value;
-
-  document
-    .getElementById("critSection")
-    .classList
-    .remove("active");
-
-  document
-    .getElementById("providerSection")
-    .classList
-    .remove("active");
-
-  if (type === "crit") {
-    document
-      .getElementById("critSection")
-      .classList
-      .add("active");
-  }
-
-  if (type === "provider") {
-    document
-      .getElementById("providerSection")
-      .classList
-      .add("active");
-  }
-
-  if (shouldSave) {
-    saveFormState();
-  }
-}
-
-function loadSpecificResOptions(shouldSave = true) {
-  const type = document.getElementById("c_res_type").value;
-  const specific = document.getElementById("c_res_specific");
-  const currentValue = specific.value;
-
-  specific.innerHTML =
-    '<option value="">-- select specific res --</option>';
-
-  if (type && critResOptions[type]) {
-    critResOptions[type].forEach(function(option) {
-      const opt = document.createElement("option");
-      opt.value = option.text;
-      opt.textContent = option.label;
-      specific.appendChild(opt);
-    });
-  }
-
-  if (currentValue) {
-    specific.value = currentValue;
-  }
-
-  if (shouldSave) {
-    saveFormState();
-  }
-}
-
-function addCritResolution() {
-  const selectedText =
-    document.getElementById("c_res_specific").value;
-
-  if (!selectedText) {
-    saveFormState();
-    return;
-  }
-
-  const resBox = document.getElementById("c_res");
-
-  resBox.value = joinParts([
-    resBox.value,
-    selectedText
-  ]);
-
-  document.getElementById("c_res_specific").value = "";
-
-  saveFormState();
-}
-
-function updateProviderTransfer(shouldSave = true) {
-  const mode = document.getElementById("p_quick").value;
-  const transferFields =
-    document.getElementById("providerTransferFields");
-
-  if (mode === "xfer") {
-    transferFields.classList.add("active");
-  } else {
-    transferFields.classList.remove("active");
-  }
-
-  if (shouldSave) {
-    saveFormState();
-  }
-}
-
-function updateProviderResolution() {
-  const mode = document.getElementById("p_quick").value;
-  const rx = document.getElementById("p_rx").value.trim();
-  const reason = document.getElementById("p_xfer_reason").value;
-  const xferredTo = document.getElementById("p_xfer_to").value.trim();
-  const resBox = document.getElementById("p_res");
-
-  updateProviderTransfer(false);
-
-  if (mode === "verbal") {
-    resBox.value =
-      "called to request a verbal pa for " +
-      rx +
-      " . pega intake #";
-  }
-
-  if (mode === "xfer") {
-    resBox.value = joinParts([
-      "called to check status on " + reason,
-      "advised pa intake line",
-      "xferred to " + xferredTo
-    ]);
-  }
-
-  saveFormState();
-}
-
-function createNote() {
-  const type = document.getElementById("formType").value;
-
-  if (!type) {
-    showStatus("please select crit or provider");
-    return;
-  }
-
-  let fullOutput = "";
-  let logEntry = null;
-
-  if (type === "crit") {
-    const agentId =
-      document.getElementById("c_id").value.trim();
-
-    const memberPa =
-      document.getElementById("c_mbr_pa").value.trim();
-
-    const rx =
-      document.getElementById("c_rx").value.trim();
-
-    const resolution =
-      document.getElementById("c_res").value.trim();
-
-    fullOutput = joinParts([
-      agentId,
-      rx,
-      resolution,
-      "drp crit prime 866.202.3474"
-    ]);
-
-    logEntry = {
-      id: makeId(),
-      dateTime: new Date().toLocaleString().toLowerCase(),
-      type: "crit",
-      agentId: agentId,
-      memberPa: memberPa,
-      actionResolution: resolution
-    };
-  }
-
-  if (type === "provider") {
-    const name =
-      document.getElementById("p_name").value.trim();
-
-    const title =
-      document.getElementById("p_title").value.trim();
-
-    const memberPa =
-      document.getElementById("p_mbr_pa").value.trim();
-
-    const rx =
-      document.getElementById("p_rx").value.trim();
-
-    const resolution =
-      document.getElementById("p_res").value.trim();
-
-    const providerType =
-      document.getElementById("p_quick").value === "xfer"
-        ? "xfer"
-        : "provider";
-
-    fullOutput = joinParts([
-      name,
-      title,
-      rx,
-      resolution,
-      "drp crit prime 866.202.3474"
-    ]);
-
-    logEntry = {
-      id: makeId(),
-      dateTime: new Date().toLocaleString().toLowerCase(),
-      type: providerType,
-      agentId: name,
-      memberPa: memberPa,
-      actionResolution: resolution
-    };
-  }
-
-  showOutput(fullOutput);
-
-  activityLog.unshift(logEntry);
-  saveLog();
-  renderLog();
-
-  saveFormState();
-  showStatus("added");
-}
-
-function showOutput(text) {
-  document.getElementById("output").innerHTML = `
-    <textarea id="generatedText" readonly onclick="this.select()"></textarea>
-
-    <div class="buttons">
-      <button onclick="copyOutput()">copy</button>
-    </div>
-  `;
-
-  document.getElementById("generatedText").value = text;
-}
-
-async function copyOutput() {
-  const textarea = document.getElementById("generatedText");
-
-  if (!textarea) {
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(textarea.value);
-  } catch (error) {
-    textarea.select();
-    document.execCommand("copy");
-  }
-
-  showStatus("copied");
-}
-
-function clearOutput() {
-  document.getElementById("output").innerHTML = "";
-  saveFormState();
-}
-
-function resetForm() {
-  if (!confirm("reset current form?")) {
-    return;
-  }
-
-  document.getElementById("formType").value = "";
-
-  document.querySelectorAll(".persist").forEach(function(el) {
-    if (el.tagName === "SELECT") {
-      el.selectedIndex = 0;
-    } else {
-      el.value = "";
-    }
-  });
-
-  document
-    .getElementById("critSection")
-    .classList
-    .remove("active");
-
-  document
-    .getElementById("providerSection")
-    .classList
-    .remove("active");
-
-  document
-    .getElementById("providerTransferFields")
-    .classList
-    .remove("active");
-
-  document.getElementById("c_res_specific").innerHTML =
-    '<option value="">-- select specific res --</option>';
-
-  document.getElementById("output").innerHTML = "";
-
-  localStorage.removeItem(stateKey);
-
-  showStatus("reset");
-}
-
-function makeId() {
-  return (
-    Date.now().toString() +
-    Math.random().toString(16).slice(2)
-  );
-}
-
-function saveLog() {
-  localStorage.setItem(
-    logKey,
-    JSON.stringify(activityLog)
-  );
-}
-
-function loadLog() {
-  try {
-    activityLog =
-      JSON.parse(localStorage.getItem(logKey)) || [];
-  } catch (error) {
-    activityLog = [];
-  }
-}
-
-function renderLog() {
-  document.getElementById("logCount").textContent =
-    activityLog.length === 1
-      ? "1 saved entry"
-      : activityLog.length + " saved entries";
-
-  const area = document.getElementById("logArea");
-
-  if (!activityLog.length) {
-    area.innerHTML =
-      '<div class="empty">no saved entries</div>';
-    return;
-  }
-
-  const rows = activityLog.map(function(entry) {
-    return `
-      <tr>
-        <td>${escapeHTML(entry.dateTime)}</td>
-        <td>${escapeHTML(entry.type)}</td>
-        <td>${escapeHTML(entry.agentId)}</td>
-        <td>${escapeHTML(entry.memberPa)}</td>
-        <td>${escapeHTML(entry.actionResolution)}</td>
-        <td class="actions">
-          <button class="small" onclick="deleteLogEntry('${entry.id}')">delete</button>
-        </td>
-      </tr>
-    `;
-  }).join("");
-
-  area.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>date/time</th>
-          <th>type</th>
-          <th>agt id</th>
-          <th>mbr id/pa#</th>
-          <th>action/res</th>
-          <th>actions</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
-
-function viewLog() {
-  renderLog();
-  showStatus("log shown");
-}
-
-function deleteLogEntry(id) {
-  if (!confirm("delete this entry?")) {
-    return;
-  }
-
-  activityLog = activityLog.filter(function(entry) {
-    return entry.id !== id;
-  });
-
-  saveLog();
-  renderLog();
-  showStatus("entry deleted");
-}
-
-function clearLog() {
-  if (!activityLog.length) {
-    alert("there are no saved entries.");
-    return;
-  }
-
-  if (!confirm("clear entire activity log?")) {
-    return;
-  }
-
-  activityLog = [];
-  localStorage.removeItem(logKey);
-  renderLog();
-  showStatus("activity log cleared");
-}
-
-function popCSV() {
-  if (!activityLog.length) {
-    alert("there are no saved entries to download.");
-    return;
-  }
-
-  const rows = [
-    ["date/time","type","agt id","mbr id/pa#","action/res"]
-  ];
-
-  activityLog.forEach(function(entry) {
-    rows.push([
-      entry.dateTime,
-      entry.type,
-      entry.agentId,
-      entry.memberPa,
-      entry.actionResolution
-    ]);
-  });
-
-  const csv = rows
-    .map(function(row) {
-      return row
-        .map(csvEscape)
-        .join(",");
-    })
-    .join("\n");
-
-  const blob = new Blob(
-    ["\uFEFF" + csv],
-    {type:"text/csv;charset=utf-8;"}
-  );
-
-  const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
-
-  link.href = url;
-  link.download =
-    "critter-activity-log-" +
-    new Date().toISOString().split("T")[0] +
-    ".csv";
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  URL.revokeObjectURL(url);
-
-  showStatus("csv downloaded");
-}
-
-function csvEscape(value) {
-  return (
-    '"' +
-    String(value || "").replace(/"/g,'""') +
-    '"'
-  );
-}
-
-function escapeHTML(value) {
-  const div = document.createElement("div");
-  div.textContent = value || "";
-  return div.innerHTML;
-}
-
-function showStatus(message) {
-  const status = document.getElementById("statusMessage");
-
-  status.textContent = message;
-
-  setTimeout(function() {
-    status.textContent = "";
-  }, 2500);
-}
-
-document.addEventListener("DOMContentLoaded",function() {
-  loadLog();
-  renderLog();
-  restoreFormState();
-
-  document
-    .getElementById("formType")
-    .addEventListener("change",function() {
-      showSelectedForm(true);
-    });
-
-  document
-    .getElementById("c_res_type")
-    .addEventListener("change",function() {
-      loadSpecificResOptions(true);
-    });
-
-  document
-    .getElementById("c_res_specific")
-    .addEventListener("change",addCritResolution);
-
-  document
-    .getElementById("p_quick")
-    .addEventListener("change",updateProviderResolution);
-
-  document
-    .getElementById("p_rx")
-    .addEventListener("input",function() {
-      if (document.getElementById("p_quick").value === "verbal") {
-        updateProviderResolution();
-      } else {
-        saveFormState();
-      }
-    });
-
-  document
-    .getElementById("p_xfer_reason")
-    .addEventListener("change",updateProviderResolution);
-
-  document
-    .getElementById("p_xfer_to")
-    .addEventListener("input",updateProviderResolution);
-
-  document.querySelectorAll(".persist").forEach(function(el) {
-    el.addEventListener("input",saveFormState);
-    el.addEventListener("change",saveFormState);
-  });
-});
-</script>
+    document.addEventListener(
+      "DOMContentLoaded",
+      displayDates
+    );
+  </script>
 
 </body>
 </html>
