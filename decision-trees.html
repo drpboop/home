@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>troubleshooting decision trees</title>
+<style>
+:root{--black:#050505;--panel:#111;--panel2:#181818;--white:#fff;--yellow:#ffd84d;--mustard:#c99a24;--border:#4b3a16;--muted:#bdbdbd;--green:#8ed18e}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--black);color:var(--white);font-family:"Century Gothic",Arial,sans-serif;overflow-wrap:anywhere}button,input{font:inherit}.wrap{width:92%;max-width:900px;margin:auto}.topbar{padding:24px 0 10px}.back{color:var(--mustard);text-decoration:none}.back:hover{text-decoration:underline}header{padding:18px 0 28px}h1{margin:0 0 8px;color:var(--mustard);font-size:clamp(1.7rem,5vw,2.5rem)}.subtitle{margin:0;color:var(--muted);line-height:1.5}.search{width:100%;margin:18px 0 22px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--white);outline:none}.search:focus{border-color:var(--mustard)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.category{min-width:0;min-height:126px;padding:20px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--white);text-align:left;cursor:pointer;transition:.2s}.category:hover,.category:focus{transform:translateY(-3px);border-color:var(--mustard);background:var(--panel2);outline:none}.category strong{display:block;margin-bottom:8px;color:var(--yellow);font-size:1.05rem}.category span{color:var(--muted);font-size:.86rem;line-height:1.4}.runner{display:none;max-width:680px;margin:5px auto 40px}.runner.active{display:block}.progress{height:6px;margin:10px 0 28px;background:#29220f;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:var(--mustard);transition:width .2s}.step-card{padding:clamp(22px,5vw,38px);border:1px solid var(--border);border-radius:14px;background:var(--panel);box-shadow:0 8px 30px rgba(0,0,0,.45)}.eyebrow{margin:0 0 10px;color:var(--mustard);font-size:.78rem;text-transform:uppercase;letter-spacing:.09em}.question{margin:0 0 14px;color:var(--yellow);font-size:clamp(1.35rem,4vw,1.9rem);line-height:1.25}.detail{min-height:50px;margin:0 0 24px;color:var(--muted);line-height:1.55}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action,.secondary{padding:13px 16px;border-radius:9px;cursor:pointer}.action{border:1px solid var(--mustard);background:var(--mustard);color:#080808;font-weight:bold}.action:hover{background:var(--yellow)}.secondary{border:1px solid var(--border);background:transparent;color:var(--white)}.secondary:hover{border-color:var(--mustard)}.done{color:var(--green)}.note{margin:24px 0 40px;color:#8f8f8f;font-size:.78rem;line-height:1.45;text-align:center}.empty{display:none;color:var(--muted);text-align:center;padding:30px}.hidden{display:none!important}@media(max-width:520px){.actions{grid-template-columns:1fr}.topbar{padding-top:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><a class="back" href="index.html">← work tools</a></div>
+  <section id="homeView">
+    <header><h1>troubleshooting decision trees</h1><p class="subtitle">Choose a situation. We’ll walk through it one step at a time.</p></header>
+    <input id="search" class="search" type="search" placeholder="Search situations…" aria-label="Search decision trees">
+    <div id="categoryGrid" class="grid"></div>
+    <p id="empty" class="empty">No matching situations found.</p>
+  </section>
+  <section id="runner" class="runner" aria-live="polite">
+    <button id="allTrees" class="secondary" type="button">← all trees</button>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <article class="step-card">
+      <p id="eyebrow" class="eyebrow"></p>
+      <h2 id="question" class="question"></h2>
+      <p id="detail" class="detail"></p>
+      <div class="actions"><button id="backStep" class="secondary" type="button">back</button><button id="nextStep" class="action" type="button">done — next</button></div>
+    </article>
+  </section>
+  <p class="note">Quick-reference guidance only. Follow current policies, required documentation, and escalation procedures.</p>
+</div>
+<script>
+const trees=[
+{title:"Claim still rejecting",group:"CAL",desc:"Authorization, dates, quantity, formulation, and pharmacy match.",steps:[
+ ["Confirm the authorization exists","Verify the correct member account, drug/formulation, and active authorization."],
+ ["Check the effective dates","Correct the dates if needed, then test the claim again."],
+ ["Check the authorized quantity","Confirm quantity and duration match the request, then retest."],
+ ["Review formulation and detailing","Confirm the submitted product matches the authorized formulation and program detailing."],
+ ["Check pharmacy match and restrictions","Review pharmacy, network, loading-dose, and other program restrictions."],
+ ["Document the result","Record what was checked, what changed, and the test-claim outcome. Escalate if it still rejects."]]},
+{title:"Missing criteria",group:"CAL",desc:"Pinpoint the field preventing criteria from loading.",steps:[
+ ["Verify the client and account","Make sure you are reviewing the correct member setup."],
+ ["Compare the FID and population segment","Correct any mismatch before continuing."],
+ ["Check product identifiers","Review GPI, NDC, MSC, and variant."],
+ ["Retest the criteria","Continue review if it now loads."],
+ ["Submit a JIRA if unresolved","Include the fields checked, test results, and clear documentation."]]},
+{title:"PA not pulling",group:"CAL",desc:"Find missing or mismatched prior authorizations.",steps:[
+ ["Confirm a PA exists","Search the correct member account and review existing approvals."],
+ ["Verify authorization details","Check dates, quantity, formulation, and authorization setup."],
+ ["Review special conditions","Check pharmacy match, loading dose, program detailing, and restrictions."],
+ ["Retest and document","Record the result and escalate if the PA still does not pull."]]},
+{title:"Loading dose",group:"CAL",desc:"Decide whether an extension is appropriate.",steps:[
+ ["Review the maintenance authorization","Confirm current therapy, dates, and maintenance dosing."],
+ ["Review recent claims","Determine whether the loading dose was already used or therapy has begun."],
+ ["Evaluate the extension","If no extension is available or appropriate, explain the maintenance-dose path."],
+ ["Document the decision","Record the claim review and the guidance provided."]]},
+{title:"Population segment",group:"CAL",desc:"Check account, FID, and population-segment alignment.",steps:[
+ ["Verify the population segment","Compare the member record with the expected program segment."],
+ ["Check FID and account","Confirm both belong to the correct client setup."],
+ ["Continue troubleshooting","Retest after corrections and document the result."]]},
+{title:"Status check",group:"CRIT",desc:"Research a case and explain its current status.",steps:[
+ ["Verify the submission","Confirm the correct case, request, and submission details."],
+ ["Review alternate systems","Look for updates, documents, or determinations in all required systems."],
+ ["Explain the current status","If documentation is pending, clearly explain what is needed and the next step."],
+ ["Consider resubmission","Only resubmit when appropriate; document the status guidance."]]},
+{title:"Approval review",group:"CRIT",desc:"Validate approval details before giving guidance.",steps:[
+ ["Verify the approval","Confirm the authorization belongs to the correct member and request."],
+ ["Check dates, quantity, and duration","Make sure each detail matches the determination."],
+ ["Review the account and authorization","Correct any setup issue before testing."],
+ ["Test the claim if needed","Use the claim-still-rejecting tree if the approval does not process."]]},
+{title:"Denial review",group:"CRIT",desc:"Explain a denial using the determination record.",steps:[
+ ["Review the denial letter","Confirm the denial reason and required next steps."],
+ ["Compare criteria and documentation","Identify which requirement was not met or not documented."],
+ ["Read determination comments","Use the reviewer’s documented rationale to explain the outcome."],
+ ["Provide clear guidance","Document what was explained and any available next step."]]},
+{title:"P2P",group:"CRIT",desc:"Research peer-to-peer status and outcome.",steps:[
+ ["Review the request and report","Confirm the correct case and current P2P status."],
+ ["Check timing and outreach","Review required timeframes and outreach attempts."],
+ ["Provide status or outcome","Explain the available next step based on the report."],
+ ["Escalate when needed","Document the guidance and escalate unresolved discrepancies."]]},
+{title:"IRO",group:"CRIT",desc:"Research external-review status and outcome.",steps:[
+ ["Research the correct case","Verify the request and external-review details."],
+ ["Review the report","Confirm the status, decision, and any required follow-up."],
+ ["Provide the outcome","Give clear guidance based on the report and document the interaction."]]},
+{title:"Documentation / refax",group:"CRIT",desc:"Verify the requester, fax, and documentation path.",steps:[
+ ["Verify the authorized requester","Confirm HIPAA requirements and that you have the correct case."],
+ ["Verify the document or fax","Check the destination, history, and whether the requested item exists."],
+ ["Choose the correct workflow","Use refax, documentation, or IRO guidance as appropriate."],
+ ["Complete and document","Record exactly what was sent or requested and to whom."]]},
+{title:"Verbal PA intake",group:"PA intake",desc:"Confirm whether verbal intake can proceed.",steps:[
+ ["Verify the caller","Confirm identity, authority, and required HIPAA elements."],
+ ["Check the request type","Confirm the case is eligible for verbal PA intake."],
+ ["Review special conditions","Check pharmacy match, loading dose, existing PA, and program detailing."],
+ ["Continue or route","Complete intake when eligible; otherwise use MDR guidance or transfer appropriately."],
+ ["Document the intake","Record verification, information received, and routing."]]},
+{title:"Inbox triage",group:"Inbox",desc:"Research, route, and close incoming work.",steps:[
+ ["Review the entire email","Identify the request, sender, attachments, and urgency."],
+ ["Find the correct case","Research the member and request in required systems."],
+ ["Choose the workflow","Use Service Delivery, MRIoA, MTAT, FWA, SeaChange, Rebuttal, or Single Intake guidance."],
+ ["Process or escalate","Complete the request when possible; escalate unclear or high-risk items."],
+ ["Document and file","Record the action and move the email to the correct location."]]},
+{title:"Reopen request",group:"Compliance",desc:"Decide whether to reopen, correct, or route.",steps:[
+ ["Identify the root cause","Determine what was missed, entered incorrectly, or changed."],
+ ["Review reopen guidance","Confirm whether the scenario qualifies for a reopen."],
+ ["Choose the correction path","Reopen and attach additional information, or correct the authorization without reopening."],
+ ["Route appropriately","Send the work to the correct queue or workflow."],
+ ["Consider C360 and document","Evaluate severity, then record the correction and reasoning."]]},
+{title:"C360",group:"Compliance",desc:"Evaluate severity and whether an audit is needed.",steps:[
+ ["Correct the case first","Complete the immediate correction and confirm the expected outcome."],
+ ["Evaluate severity","Consider impact, repeat risk, and whether a compliance review is warranted."],
+ ["Determine whether C360 is needed","Many routine corrections do not require C360; follow current guidance."],
+ ["Document the decision","Record the root cause, correction, and audit decision."]]}
+];
+const grid=document.getElementById('categoryGrid'),home=document.getElementById('homeView'),runner=document.getElementById('runner'),search=document.getElementById('search'),empty=document.getElementById('empty');
+let active=null,index=0;
+function renderCategories(filter=''){const q=filter.trim().toLowerCase();grid.innerHTML='';const shown=trees.filter(t=>(t.title+' '+t.group+' '+t.desc).toLowerCase().includes(q));shown.forEach((tree,i)=>{const b=document.createElement('button');b.className='category';b.type='button';b.innerHTML=`<strong>${tree.title}</strong><span>${tree.group} · ${tree.desc}</span>`;b.onclick=()=>start(tree);grid.appendChild(b)});empty.style.display=shown.length?'none':'block'}
+function start(tree){active=tree;index=0;home.classList.add('hidden');runner.classList.add('active');showStep();window.scrollTo({top:0,behavior:'smooth'})}
+function showStep(){const finished=index>=active.steps.length;document.getElementById('eyebrow').textContent=finished?active.group:`${active.group} · step ${index+1} of ${active.steps.length}`;document.getElementById('question').textContent=finished?'All steps complete':active.steps[index][0];document.getElementById('question').classList.toggle('done',finished);document.getElementById('detail').textContent=finished?'Document the outcome and follow current escalation guidance if the issue remains unresolved.':active.steps[index][1];document.getElementById('progressBar').style.width=(finished?100:(index/active.steps.length)*100)+'%';document.getElementById('nextStep').textContent=finished?'finish':'done — next';document.getElementById('backStep').disabled=index===0}
+document.getElementById('nextStep').onclick=()=>{if(index>=active.steps.length){returnHome()}else{index++;showStep()}};
+document.getElementById('backStep').onclick=()=>{if(index>0){index--;showStep()}};
+document.getElementById('allTrees').onclick=returnHome;
+function returnHome(){runner.classList.remove('active');home.classList.remove('hidden');active=null;search.focus();window.scrollTo({top:0,behavior:'smooth'})}
+search.addEventListener('input',e=>renderCategories(e.target.value));renderCategories();
+</script>
+</body>
+</html>
