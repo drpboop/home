@@ -5,123 +5,130 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>troubleshooting decision trees</title>
 <style>
-:root{--black:#050505;--panel:#111;--panel2:#181818;--white:#fff;--yellow:#ffd84d;--mustard:#c99a24;--border:#4b3a16;--muted:#bdbdbd;--green:#8ed18e}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--black);color:var(--white);font-family:"Century Gothic",Arial,sans-serif;overflow-wrap:anywhere}button,input{font:inherit}.wrap{width:92%;max-width:900px;margin:auto}.topbar{padding:24px 0 10px}.back{color:var(--mustard);text-decoration:none}.back:hover{text-decoration:underline}header{padding:18px 0 28px}h1{margin:0 0 8px;color:var(--mustard);font-size:clamp(1.7rem,5vw,2.5rem)}.subtitle{margin:0;color:var(--muted);line-height:1.5}.search{width:100%;margin:18px 0 22px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--white);outline:none}.search:focus{border-color:var(--mustard)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.category{min-width:0;min-height:126px;padding:20px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--white);text-align:left;cursor:pointer;transition:.2s}.category:hover,.category:focus{transform:translateY(-3px);border-color:var(--mustard);background:var(--panel2);outline:none}.category strong{display:block;margin-bottom:8px;color:var(--yellow);font-size:1.05rem}.category span{color:var(--muted);font-size:.86rem;line-height:1.4}.runner{display:none;max-width:680px;margin:5px auto 40px}.runner.active{display:block}.progress{height:6px;margin:10px 0 28px;background:#29220f;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:var(--mustard);transition:width .2s}.step-card{padding:clamp(22px,5vw,38px);border:1px solid var(--border);border-radius:14px;background:var(--panel);box-shadow:0 8px 30px rgba(0,0,0,.45)}.eyebrow{margin:0 0 10px;color:var(--mustard);font-size:.78rem;text-transform:uppercase;letter-spacing:.09em}.question{margin:0 0 14px;color:var(--yellow);font-size:clamp(1.35rem,4vw,1.9rem);line-height:1.25}.detail{min-height:50px;margin:0 0 24px;color:var(--muted);line-height:1.55}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action,.secondary{padding:13px 16px;border-radius:9px;cursor:pointer}.action{border:1px solid var(--mustard);background:var(--mustard);color:#080808;font-weight:bold}.action:hover{background:var(--yellow)}.secondary{border:1px solid var(--border);background:transparent;color:var(--white)}.secondary:hover{border-color:var(--mustard)}.done{color:var(--green)}.note{margin:24px 0 40px;color:#8f8f8f;font-size:.78rem;line-height:1.45;text-align:center}.empty{display:none;color:var(--muted);text-align:center;padding:30px}.hidden{display:none!important}@media(max-width:520px){.actions{grid-template-columns:1fr}.topbar{padding-top:18px}}
+:root{--black:#050505;--panel:#111;--panel2:#181818;--white:#fff;--yellow:#ffd84d;--mustard:#c99a24;--border:#4b3a16;--muted:#bdbdbd;--green:#8ed18e;--red:#e8a0a0}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--black);color:var(--white);font-family:"Century Gothic",Arial,sans-serif;overflow-wrap:anywhere;text-transform:lowercase}button,input{font:inherit;text-transform:lowercase}.wrap{width:92%;max-width:900px;margin:auto}.topbar{padding:24px 0 10px}.back{color:var(--mustard);text-decoration:none}.back:hover{text-decoration:underline}header{padding:18px 0 28px}h1{margin:0 0 8px;color:var(--mustard);font-size:clamp(1.7rem,5vw,2.5rem)}.subtitle{margin:0;color:var(--muted);line-height:1.5}.search{width:100%;margin:18px 0 22px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--white);outline:none}.search:focus{border-color:var(--mustard)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.category{min-width:0;min-height:126px;padding:20px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--white);text-align:left;cursor:pointer;transition:.2s}.category:hover,.category:focus{transform:translateY(-3px);border-color:var(--mustard);background:var(--panel2);outline:none}.category strong{display:block;margin-bottom:8px;color:var(--yellow);font-size:1.05rem}.category span{color:var(--muted);font-size:.86rem;line-height:1.4}.runner{display:none;max-width:680px;margin:5px auto 40px}.runner.active{display:block}.trail{margin:18px 0 12px;color:var(--muted);font-size:.78rem}.step-card{padding:clamp(22px,5vw,38px);border:1px solid var(--border);border-radius:14px;background:var(--panel);box-shadow:0 8px 30px rgba(0,0,0,.45)}.eyebrow{margin:0 0 10px;color:var(--mustard);font-size:.78rem;letter-spacing:.09em}.question{margin:0 0 14px;color:var(--yellow);font-size:clamp(1.35rem,4vw,1.9rem);line-height:1.25}.detail{min-height:50px;margin:0 0 24px;color:var(--muted);line-height:1.55}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice,.secondary,.next-tree{padding:13px 16px;border-radius:9px;cursor:pointer;font-weight:bold}.yes{border:1px solid var(--green);background:var(--green);color:#080808}.yes:hover{background:#b7e7b7}.no{border:1px solid var(--red);background:transparent;color:var(--red)}.no:hover{background:#281717}.secondary{border:1px solid var(--border);background:transparent;color:var(--white);font-weight:normal}.secondary:hover{border-color:var(--mustard)}.next-tree{width:100%;margin-top:10px;border:1px solid var(--mustard);background:var(--mustard);color:#080808}.outcome{color:var(--green)}.workflow{margin:18px 0 0;padding:14px;border-left:3px solid var(--mustard);background:#19150b;color:var(--yellow);line-height:1.45}.note{margin:24px 0 40px;color:#8f8f8f;font-size:.78rem;line-height:1.45;text-align:center}.empty{display:none;color:var(--muted);text-align:center;padding:30px}.hidden{display:none!important}@media(max-width:520px){.actions{grid-template-columns:1fr}.topbar{padding-top:18px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar"><a class="back" href="index.html">← work tools</a></div>
   <section id="homeView">
-    <header><h1>troubleshooting decision trees</h1><p class="subtitle">Choose a situation. We’ll walk through it one step at a time.</p></header>
-    <input id="search" class="search" type="search" placeholder="Search situations…" aria-label="Search decision trees">
+    <header><h1>troubleshooting decision trees</h1><p class="subtitle">choose a situation, then answer yes or no. related trees and workflows will appear when you need them.</p></header>
+    <input id="search" class="search" type="search" placeholder="search situations…" aria-label="search decision trees">
     <div id="categoryGrid" class="grid"></div>
-    <p id="empty" class="empty">No matching situations found.</p>
+    <p id="empty" class="empty">no matching situations found.</p>
   </section>
   <section id="runner" class="runner" aria-live="polite">
     <button id="allTrees" class="secondary" type="button">← all trees</button>
-    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <p id="trail" class="trail"></p>
     <article class="step-card">
       <p id="eyebrow" class="eyebrow"></p>
       <h2 id="question" class="question"></h2>
       <p id="detail" class="detail"></p>
-      <div class="actions"><button id="backStep" class="secondary" type="button">back</button><button id="nextStep" class="action" type="button">done — next</button></div>
+      <p id="workflow" class="workflow hidden"></p>
+      <button id="nextTree" class="next-tree hidden" type="button"></button>
+      <div id="choices" class="actions"><button id="yesChoice" class="choice yes" type="button">yes</button><button id="noChoice" class="choice no" type="button">no</button></div>
+      <button id="backStep" class="secondary" type="button" style="width:100%;margin-top:10px">← back</button>
     </article>
   </section>
-  <p class="note">Quick-reference guidance only. Follow current policies, required documentation, and escalation procedures.</p>
+  <p class="note">quick-reference guidance only. follow current policies, required documentation, and escalation procedures.</p>
 </div>
 <script>
+const end=(result,detail,workflow='',next='')=>({result,detail,workflow,next});
 const trees=[
-{title:"Claim still rejecting",group:"CAL",desc:"Authorization, dates, quantity, formulation, and pharmacy match.",steps:[
- ["Confirm the authorization exists","Verify the correct member account, drug/formulation, and active authorization."],
- ["Check the effective dates","Correct the dates if needed, then test the claim again."],
- ["Check the authorized quantity","Confirm quantity and duration match the request, then retest."],
- ["Review formulation and detailing","Confirm the submitted product matches the authorized formulation and program detailing."],
- ["Check pharmacy match and restrictions","Review pharmacy, network, loading-dose, and other program restrictions."],
- ["Document the result","Record what was checked, what changed, and the test-claim outcome. Escalate if it still rejects."]]},
-{title:"Missing criteria",group:"CAL",desc:"Pinpoint the field preventing criteria from loading.",steps:[
- ["Verify the client and account","Make sure you are reviewing the correct member setup."],
- ["Compare the FID and population segment","Correct any mismatch before continuing."],
- ["Check product identifiers","Review GPI, NDC, MSC, and variant."],
- ["Retest the criteria","Continue review if it now loads."],
- ["Submit a JIRA if unresolved","Include the fields checked, test results, and clear documentation."]]},
-{title:"PA not pulling",group:"CAL",desc:"Find missing or mismatched prior authorizations.",steps:[
- ["Confirm a PA exists","Search the correct member account and review existing approvals."],
- ["Verify authorization details","Check dates, quantity, formulation, and authorization setup."],
- ["Review special conditions","Check pharmacy match, loading dose, program detailing, and restrictions."],
- ["Retest and document","Record the result and escalate if the PA still does not pull."]]},
-{title:"Loading dose",group:"CAL",desc:"Decide whether an extension is appropriate.",steps:[
- ["Review the maintenance authorization","Confirm current therapy, dates, and maintenance dosing."],
- ["Review recent claims","Determine whether the loading dose was already used or therapy has begun."],
- ["Evaluate the extension","If no extension is available or appropriate, explain the maintenance-dose path."],
- ["Document the decision","Record the claim review and the guidance provided."]]},
-{title:"Population segment",group:"CAL",desc:"Check account, FID, and population-segment alignment.",steps:[
- ["Verify the population segment","Compare the member record with the expected program segment."],
- ["Check FID and account","Confirm both belong to the correct client setup."],
- ["Continue troubleshooting","Retest after corrections and document the result."]]},
-{title:"Status check",group:"CRIT",desc:"Research a case and explain its current status.",steps:[
- ["Verify the submission","Confirm the correct case, request, and submission details."],
- ["Review alternate systems","Look for updates, documents, or determinations in all required systems."],
- ["Explain the current status","If documentation is pending, clearly explain what is needed and the next step."],
- ["Consider resubmission","Only resubmit when appropriate; document the status guidance."]]},
-{title:"Approval review",group:"CRIT",desc:"Validate approval details before giving guidance.",steps:[
- ["Verify the approval","Confirm the authorization belongs to the correct member and request."],
- ["Check dates, quantity, and duration","Make sure each detail matches the determination."],
- ["Review the account and authorization","Correct any setup issue before testing."],
- ["Test the claim if needed","Use the claim-still-rejecting tree if the approval does not process."]]},
-{title:"Denial review",group:"CRIT",desc:"Explain a denial using the determination record.",steps:[
- ["Review the denial letter","Confirm the denial reason and required next steps."],
- ["Compare criteria and documentation","Identify which requirement was not met or not documented."],
- ["Read determination comments","Use the reviewer’s documented rationale to explain the outcome."],
- ["Provide clear guidance","Document what was explained and any available next step."]]},
-{title:"P2P",group:"CRIT",desc:"Research peer-to-peer status and outcome.",steps:[
- ["Review the request and report","Confirm the correct case and current P2P status."],
- ["Check timing and outreach","Review required timeframes and outreach attempts."],
- ["Provide status or outcome","Explain the available next step based on the report."],
- ["Escalate when needed","Document the guidance and escalate unresolved discrepancies."]]},
-{title:"IRO",group:"CRIT",desc:"Research external-review status and outcome.",steps:[
- ["Research the correct case","Verify the request and external-review details."],
- ["Review the report","Confirm the status, decision, and any required follow-up."],
- ["Provide the outcome","Give clear guidance based on the report and document the interaction."]]},
-{title:"Documentation / refax",group:"CRIT",desc:"Verify the requester, fax, and documentation path.",steps:[
- ["Verify the authorized requester","Confirm HIPAA requirements and that you have the correct case."],
- ["Verify the document or fax","Check the destination, history, and whether the requested item exists."],
- ["Choose the correct workflow","Use refax, documentation, or IRO guidance as appropriate."],
- ["Complete and document","Record exactly what was sent or requested and to whom."]]},
-{title:"Verbal PA intake",group:"PA intake",desc:"Confirm whether verbal intake can proceed.",steps:[
- ["Verify the caller","Confirm identity, authority, and required HIPAA elements."],
- ["Check the request type","Confirm the case is eligible for verbal PA intake."],
- ["Review special conditions","Check pharmacy match, loading dose, existing PA, and program detailing."],
- ["Continue or route","Complete intake when eligible; otherwise use MDR guidance or transfer appropriately."],
- ["Document the intake","Record verification, information received, and routing."]]},
-{title:"Inbox triage",group:"Inbox",desc:"Research, route, and close incoming work.",steps:[
- ["Review the entire email","Identify the request, sender, attachments, and urgency."],
- ["Find the correct case","Research the member and request in required systems."],
- ["Choose the workflow","Use Service Delivery, MRIoA, MTAT, FWA, SeaChange, Rebuttal, or Single Intake guidance."],
- ["Process or escalate","Complete the request when possible; escalate unclear or high-risk items."],
- ["Document and file","Record the action and move the email to the correct location."]]},
-{title:"Reopen request",group:"Compliance",desc:"Decide whether to reopen, correct, or route.",steps:[
- ["Identify the root cause","Determine what was missed, entered incorrectly, or changed."],
- ["Review reopen guidance","Confirm whether the scenario qualifies for a reopen."],
- ["Choose the correction path","Reopen and attach additional information, or correct the authorization without reopening."],
- ["Route appropriately","Send the work to the correct queue or workflow."],
- ["Consider C360 and document","Evaluate severity, then record the correction and reasoning."]]},
-{title:"C360",group:"Compliance",desc:"Evaluate severity and whether an audit is needed.",steps:[
- ["Correct the case first","Complete the immediate correction and confirm the expected outcome."],
- ["Evaluate severity","Consider impact, repeat risk, and whether a compliance review is warranted."],
- ["Determine whether C360 is needed","Many routine corrections do not require C360; follow current guidance."],
- ["Document the decision","Record the root cause, correction, and audit decision."]]}
+{id:'claim',title:'claim still rejecting',group:'cal',desc:'authorization, dates, quantity, formulation, and pharmacy match.',start:'auth',nodes:{
+ auth:{q:'does an active authorization exist?',d:'verify the correct member account, drug, formulation, and authorization.',yes:'dates',no:end('create or locate the authorization','after correcting the authorization, test the claim and document the result.','missing pa workflow')},
+ dates:{q:'are the effective dates correct?',d:'compare the authorization dates with the requested fill date.',yes:'qty',no:end('correct the dates and retest','document the change and the test-claim result.')},
+ qty:{q:'are quantity and duration correct?',d:'compare the submitted quantity with the authorization and determination.',yes:'form',no:end('correct the quantity and retest','document the change and the test-claim result.')},
+ form:{q:'does the formulation and program detailing match?',d:'compare the submitted product with the authorized product and program.',yes:'pharm',no:end('correct the authorization or claim details','retest after the formulation or detailing is corrected.')},
+ pharm:{q:'does the pharmacy match and meet network rules?',d:'review pharmacy match, network restrictions, and program restrictions.',yes:'loading',no:end('use the pharmacy match workflow','identify the correct pharmacy, educate the caller, and document.','pharmacy match workflow')},
+ loading:{q:'could this be a loading-dose issue?',d:'review maintenance authorization, claims, and dosing.',yes:end('continue in the loading dose tree','review whether an extension is available or appropriate.','loading dose workflow','loading'),no:end('escalate the unresolved rejection','include the authorization, test claim, restrictions checked, and documentation.','senior investigation workflow')}
+}},
+{id:'criteria',title:'missing criteria',group:'cal',desc:'find the field preventing criteria from loading.',start:'client',nodes:{
+ client:{q:'are the client and account correct?',d:'confirm the member is under the expected client setup.',yes:'segment',no:end('correct the client or account and retest','continue review if criteria now loads.')},
+ segment:{q:'do the fid and population segment match?',d:'compare both fields with the expected program setup.',yes:'product',no:end('correct the fid or population segment and retest','use the population segment tree if more research is needed.','population segment workflow','segment')},
+ product:{q:'are gpi, ndc, msc, and variant correct?',d:'compare every product identifier before escalating.',yes:'loads',no:end('correct the product identifier and retest','document which field was changed.')},
+ loads:{q:'does the criteria load after retesting?',d:'refresh or resubmit using the corrected information.',yes:end('continue the review','document the correction and proceed with the case.'),no:end('submit a jira','include client, account, fid, population segment, gpi, ndc, msc, variant, and test results.','jira workflow')}
+}},
+{id:'pa',title:'pa not pulling',group:'cal',desc:'find a missing or mismatched prior authorization.',start:'exists',nodes:{
+ exists:{q:'can you find an existing pa?',d:'search the correct member account and review existing approvals.',yes:'details',no:end('use the missing pa workflow','create or locate the authorization, test the claim, and document.','missing pa workflow','claim')},
+ details:{q:'are the account, dates, quantity, and formulation correct?',d:'compare the pa with the request and claim.',yes:'special',no:end('correct the authorization and retest','document the corrected field and result.','authorization correction workflow','claim')},
+ special:{q:'are special program conditions satisfied?',d:'check pharmacy match, loading dose, program detailing, and restrictions.',yes:end('escalate if the pa still does not pull','include all fields checked and the test result.','senior investigation workflow'),no:end('open the related troubleshooting tree','use the matching tree for the failed condition.','claim troubleshooting workflow','claim')}
+}},
+{id:'loading',title:'loading dose',group:'cal',desc:'decide whether an extension is appropriate.',start:'maintenance',nodes:{
+ maintenance:{q:'is there a maintenance authorization?',d:'confirm therapy, authorization dates, and maintenance dosing.',yes:'claims',no:end('no extension is available','follow current intake or authorization guidance.','pa assistance workflow')},
+ claims:{q:'do claims show the loading dose was already used?',d:'review recent paid and rejected claims.',yes:end('an extension is usually not appropriate','review maintenance dosing and document the claim history.'),no:'eligible'},
+ eligible:{q:'does current guidance allow an extension?',d:'confirm the request meets all loading-dose requirements.',yes:end('process the permitted extension','test the claim and document the decision.','loading dose workflow'),no:end('continue with maintenance dosing','explain why an extension is not appropriate and document.')}
+}},
+{id:'segment',title:'population segment',group:'cal',desc:'check account, fid, and population-segment alignment.',start:'expected',nodes:{
+ expected:{q:'is the population segment the expected segment?',d:'compare the member record with the program setup.',yes:'fid',no:end('correct the population segment and retest','document the prior and corrected values.')},
+ fid:{q:'do the fid and account match the segment?',d:'confirm all three fields belong to the same client setup.',yes:end('continue troubleshooting','return to the missing criteria tree if criteria still does not load.','','criteria'),no:end('correct the fid or account and retest','document the correction and outcome.')}
+}},
+{id:'status',title:'status check',group:'crit',desc:'research a case and route to the right outcome.',start:'verified',nodes:{
+ verified:{q:'is this the correct case and submission?',d:'verify member, request, submission, and case identifiers.',yes:'complete',no:end('locate the correct case','document which case was reviewed and restart the status check.')},
+ complete:{q:'is there a completed determination?',d:'review all required systems for the latest decision.',yes:'approved',no:'docs'},
+ approved:{q:'was the request approved?',d:'confirm the decision before giving status guidance.',yes:end('continue in the approval review tree','verify dates, quantity, duration, account, and authorization.','approval workflow','approval'),no:end('continue in the denial review tree','review the denial letter, criteria, documentation, and comments.','denial workflow','denial')},
+ docs:{q:'is documentation still needed?',d:'review pending requirements and outreach history.',yes:end('use the documentation / refax tree','explain what is missing and the next step.','documentation workflow','docs'),no:end('explain the pending status','consider resubmission only when current guidance supports it.','status check workflow')}
+}},
+{id:'approval',title:'approval review',group:'crit',desc:'validate approval details before giving guidance.',start:'correct',nodes:{
+ correct:{q:'does the approval belong to the correct member and request?',d:'verify the account, case, and authorization.',yes:'details',no:end('locate or correct the approval','document the discrepancy and correction.','authorization correction workflow')},
+ details:{q:'are dates, quantity, and duration correct?',d:'compare every field with the determination.',yes:'process',no:end('correct the approval details','test and document after the correction.')},
+ process:{q:'does the approval process correctly?',d:'test the claim when appropriate.',yes:end('provide the approval guidance','document what was verified and explained.'),no:end('continue in claim still rejecting','use the claim troubleshooting path.','claim still rejecting workflow','claim')}
+}},
+{id:'denial',title:'denial review',group:'crit',desc:'explain a denial using the determination record.',start:'letter',nodes:{
+ letter:{q:'is the denial letter available?',d:'confirm the denial reason and required next steps.',yes:'matches',no:end('use the documentation / refax tree','verify the requester and send the correct document.','refax workflow','docs')},
+ matches:{q:'does the letter match the criteria and comments?',d:'compare criteria, submitted documentation, and determination comments.',yes:'p2p',no:end('escalate the discrepancy','document the conflicting information.','crit escalation workflow')},
+ p2p:{q:'is a p2p or further review available?',d:'review the denial guidance and timing.',yes:end('continue in the p2p tree','check status, timing, outreach, and outcome.','p2p workflow','p2p'),no:end('provide denial guidance','explain the documented reason and available next step.')}
+}},
+{id:'p2p',title:'p2p',group:'crit',desc:'research peer-to-peer status and outcome.',start:'request',nodes:{
+ request:{q:'is there an active p2p request?',d:'verify the correct case and p2p details.',yes:'report',no:end('provide the current status','explain whether a p2p can be requested under current guidance.','p2p workflow')},
+ report:{q:'is the p2p report or outcome available?',d:'review timing, outreach, and the report.',yes:end('provide the documented outcome','record the report reviewed and guidance provided.'),no:end('escalate or provide pending status','follow current timing and outreach guidance.','p2p escalation workflow')}
+}},
+{id:'iro',title:'iro',group:'crit',desc:'research external-review status and outcome.',start:'case',nodes:{
+ case:{q:'is this the correct external-review case?',d:'verify the request and iro details.',yes:'report',no:end('locate the correct case','restart the iro review with the verified case.')},
+ report:{q:'is the iro report available?',d:'review the current status in required systems.',yes:end('provide the documented outcome','record the report and guidance provided.'),no:end('provide a status update','follow current iro timing and escalation guidance.','iro workflow')}
+}},
+{id:'docs',title:'documentation / refax',group:'crit',desc:'verify the requester, fax, and documentation path.',start:'requester',nodes:{
+ requester:{q:'is the requester authorized and hipaa verified?',d:'confirm identity, authority, and the correct case.',yes:'available',no:end('do not release documentation','complete required verification or follow escalation guidance.','hipaa verification workflow')},
+ available:{q:'is the requested document available?',d:'review the case, fax history, and document type.',yes:'fax',no:end('use the documentation workflow','request or locate the missing documentation.','documentation workflow')},
+ fax:{q:'is the fax destination verified?',d:'confirm the number and authorized recipient.',yes:end('complete the refax and document it','record what was sent, to whom, and when.','refax workflow'),no:end('verify the fax before sending','do not send until the destination is confirmed.','fax verification workflow')}
+}},
+{id:'verbal',title:'verbal pa intake',group:'pa intake',desc:'confirm whether verbal intake can proceed.',start:'caller',nodes:{
+ caller:{q:'is the caller verified and authorized?',d:'confirm identity, authority, and hipaa elements.',yes:'eligible',no:end('do not continue verbal intake','complete verification or route under current guidance.','contact center guidance')},
+ eligible:{q:'is the request eligible for verbal pa intake?',d:'check request type and intake requirements.',yes:'special',no:end('use mdr guidance or transfer','route the caller to the appropriate intake path.','mdr workflow')},
+ special:{q:'are pharmacy match, loading dose, existing pa, and program details resolved?',d:'review special conditions before completing intake.',yes:end('continue verbal intake','complete and document the intake.','verbal intake workflow'),no:end('open the related troubleshooting tree','resolve the failed condition before continuing.','pa intake decision workflow','pa')}
+}},
+{id:'inbox',title:'inbox triage',group:'inbox',desc:'research, route, and close incoming work.',start:'clear',nodes:{
+ clear:{q:'is the request clear and complete?',d:'review the full email, sender, attachments, and urgency.',yes:'case',no:end('research or escalate for clarification','do not process an unclear request.','inbox escalation workflow')},
+ case:{q:'can you locate the correct case?',d:'research the member and request in required systems.',yes:'standard',no:end('escalate the unmatched request','document the research completed.','inbox escalation workflow')},
+ standard:{q:'is this a standard service delivery request?',d:'identify the request type before routing.',yes:end('use the service delivery workflow','process, document, and file the email.','service delivery workflow'),no:'special'},
+ special:{q:'is it an additional-information or sechange request?',d:'review the email contents and case notes.',yes:end('use the additional information / sechange workflow','determine the error, correct it, and consider c360.','sechange workflow'),no:end('route to the matching inbox workflow','choose mrioa, single intake, mtat, fwa, or rebuttal.','mrioa · single intake · mtat · fwa · rebuttal workflows')}
+}},
+{id:'reopen',title:'reopen request',group:'compliance',desc:'decide whether to reopen, correct, or route.',start:'qualifies',nodes:{
+ qualifies:{q:'does the request meet reopen guidance?',d:'identify what was missed, entered incorrectly, or changed.',yes:'ai',no:'auth'},
+ ai:{q:'is additional information needed?',d:'review the reopen reason and supporting documents.',yes:end('reopen, attach the additional information, and route','document the root cause and action.','additional information workflow'),no:end('reopen and route','document why the case qualified.','master reopen workflow')},
+ auth:{q:'is the authorization itself incorrect?',d:'compare the authorization with the expected outcome.',yes:end('correct the authorization without reopening','test, route, and document the correction.','authorization correction workflow'),no:'severity'},
+ severity:{q:'could the issue require c360 review?',d:'consider impact, repeat risk, and severity.',yes:end('continue in the c360 tree','correct the case first, then evaluate audit need.','c360 workflow','c360'),no:end('usually no reopen is needed','document the review and route under current guidance.')}
+}},
+{id:'c360',title:'c360',group:'compliance',desc:'evaluate severity and whether an audit is needed.',start:'corrected',nodes:{
+ corrected:{q:'has the case been corrected?',d:'complete the immediate correction and confirm the expected outcome.',yes:'severity',no:end('correct the case first','document what changed and verify the outcome.','correction workflow')},
+ severity:{q:'is there meaningful member, client, or compliance impact?',d:'consider severity, repeat risk, and whether an audit is warranted.',yes:'audit',no:end('c360 is usually not needed','document the correction and reasoning.')},
+ audit:{q:'does current guidance require an audit or c360?',d:'apply the current compliance threshold.',yes:end('complete the c360 process','include root cause, impact, correction, and prevention.','c360 workflow'),no:end('document why c360 was not required','retain the correction details and reasoning.')}
+}}
 ];
+window.decisionTrees=trees;
+const byId=Object.fromEntries(trees.map(t=>[t.id,t]));
 const grid=document.getElementById('categoryGrid'),home=document.getElementById('homeView'),runner=document.getElementById('runner'),search=document.getElementById('search'),empty=document.getElementById('empty');
-let active=null,index=0;
-function renderCategories(filter=''){const q=filter.trim().toLowerCase();grid.innerHTML='';const shown=trees.filter(t=>(t.title+' '+t.group+' '+t.desc).toLowerCase().includes(q));shown.forEach((tree,i)=>{const b=document.createElement('button');b.className='category';b.type='button';b.innerHTML=`<strong>${tree.title}</strong><span>${tree.group} · ${tree.desc}</span>`;b.onclick=()=>start(tree);grid.appendChild(b)});empty.style.display=shown.length?'none':'block'}
-function start(tree){active=tree;index=0;home.classList.add('hidden');runner.classList.add('active');showStep();window.scrollTo({top:0,behavior:'smooth'})}
-function showStep(){const finished=index>=active.steps.length;document.getElementById('eyebrow').textContent=finished?active.group:`${active.group} · step ${index+1} of ${active.steps.length}`;document.getElementById('question').textContent=finished?'All steps complete':active.steps[index][0];document.getElementById('question').classList.toggle('done',finished);document.getElementById('detail').textContent=finished?'Document the outcome and follow current escalation guidance if the issue remains unresolved.':active.steps[index][1];document.getElementById('progressBar').style.width=(finished?100:(index/active.steps.length)*100)+'%';document.getElementById('nextStep').textContent=finished?'finish':'done — next';document.getElementById('backStep').disabled=index===0}
-document.getElementById('nextStep').onclick=()=>{if(index>=active.steps.length){returnHome()}else{index++;showStep()}};
-document.getElementById('backStep').onclick=()=>{if(index>0){index--;showStep()}};
-document.getElementById('allTrees').onclick=returnHome;
-function returnHome(){runner.classList.remove('active');home.classList.remove('hidden');active=null;search.focus();window.scrollTo({top:0,behavior:'smooth'})}
-search.addEventListener('input',e=>renderCategories(e.target.value));renderCategories();
+const question=document.getElementById('question'),detail=document.getElementById('detail'),eyebrow=document.getElementById('eyebrow'),workflow=document.getElementById('workflow'),choices=document.getElementById('choices'),nextTree=document.getElementById('nextTree'),backStep=document.getElementById('backStep'),trail=document.getElementById('trail');
+let active=null,current=null,history=[];
+function renderCategories(filter=''){const q=filter.trim().toLowerCase();grid.innerHTML='';const shown=trees.filter(t=>(t.title+' '+t.group+' '+t.desc).includes(q));shown.forEach(tree=>{const b=document.createElement('button');b.className='category';b.type='button';b.innerHTML=`<strong>${tree.title}</strong><span>${tree.group} · ${tree.desc}</span>`;b.onclick=()=>start(tree.id);grid.appendChild(b)});empty.style.display=shown.length?'none':'block'}
+function start(id){active=byId[id];current=active.start;history=[];home.classList.add('hidden');runner.classList.add('active');render();window.scrollTo({top:0,behavior:'smooth'})}
+function render(){const item=typeof current==='string'?active.nodes[current]:current;eyebrow.textContent=active.group+' · '+active.title;trail.textContent=history.length?history.map(h=>h.answer).join(' → '):'start';backStep.disabled=!history.length;workflow.classList.add('hidden');nextTree.classList.add('hidden');question.classList.remove('outcome');if(item.q){question.textContent=item.q;detail.textContent=item.d;choices.classList.remove('hidden')}else{question.textContent=item.result;question.classList.add('outcome');detail.textContent=item.detail;choices.classList.add('hidden');if(item.workflow){workflow.textContent='continue in: '+item.workflow;workflow.classList.remove('hidden')}if(item.next){nextTree.textContent='open '+byId[item.next].title+' tree →';nextTree.classList.remove('hidden');nextTree.onclick=()=>start(item.next)}}}
+function choose(answer){const node=active.nodes[current];history.push({node:current,answer});current=node[answer];render()}
+document.getElementById('yesChoice').onclick=()=>choose('yes');document.getElementById('noChoice').onclick=()=>choose('no');
+backStep.onclick=()=>{if(history.length){current=history.pop().node;render()}};document.getElementById('allTrees').onclick=returnHome;
+function returnHome(){runner.classList.remove('active');home.classList.remove('hidden');active=null;current=null;history=[];search.focus();window.scrollTo({top:0,behavior:'smooth'})}
+search.addEventListener('input',e=>renderCategories(e.target.value.toLowerCase()));renderCategories();
 </script>
 </body>
 </html>
