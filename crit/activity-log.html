@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>critter activity log</title>
+<style>
+:root{--black:#050505;--panel:#111;--panelHover:#181818;--white:#fff;--yellow:#ffd84d;--mustard:#c99a24;--border:#4b3a16;--muted:#cfcfcf;--danger:#e58a8a}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--black);color:var(--white);font-family:"Century Gothic",Arial,sans-serif;text-transform:lowercase}.site-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:14px 12px;border-bottom:1px solid var(--border);background:#090909}.site-nav a{padding:8px 10px;border-radius:7px;color:var(--muted);text-decoration:none;font-size:.78rem}.site-nav a:hover,.site-nav a.active{background:var(--panelHover);color:var(--yellow)}.page{width:94%;max-width:1150px;margin:30px auto 50px}.back{display:inline-block;margin-bottom:20px;color:var(--mustard);text-decoration:none}.back:hover{text-decoration:underline}h1{margin:0 0 8px;color:var(--mustard)}.count{margin:0 0 18px;color:var(--muted)}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px}button{padding:10px 16px;border:1px solid var(--mustard);border-radius:8px;background:var(--mustard);color:#080808;font:inherit;font-weight:bold;text-transform:lowercase;cursor:pointer}.danger{border-color:var(--danger);background:transparent;color:var(--danger)}.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;background:var(--panel)}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:12px 10px;border-bottom:1px solid #2b2414;text-align:left;vertical-align:top;font-size:.84rem}th{color:var(--yellow);background:#17130b}td{color:var(--muted)}tr:last-child td{border-bottom:0}.small{padding:6px 10px;border-color:var(--danger);background:transparent;color:var(--danger);font-size:.74rem}.empty{padding:36px;color:var(--muted);text-align:center}.status{min-height:22px;margin-top:12px;color:var(--mustard);text-align:center}@media(max-width:550px){.site-nav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.site-nav a{white-space:nowrap}.page{margin-top:22px}}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="work tools">
+  <a href="https://drpboop.github.io/home/">home</a><a class="active" href="https://drpboop.github.io/home/crit/">critter</a><a href="https://drpboop.github.io/home/refill-lookback/">refill lookback</a><a href="https://drpboop.github.io/home/situational/">situational</a><a href="https://drpboop.github.io/home/status-log/">status log</a><a href="https://drpboop.github.io/home/decision-trees/">decision trees</a>
+</nav>
+<main class="page">
+  <a class="back" href="index.html">← back to critter</a>
+  <h1>activity log</h1>
+  <p id="logCount" class="count">0 saved entries</p>
+  <div class="buttons"><button onclick="popCSV()">pop</button><button class="danger" onclick="clearLog()">clear log</button></div>
+  <div id="logArea" class="table-wrap"></div>
+  <div id="statusMessage" class="status"></div>
+</main>
+<script>
+const logKey="critterActivityLog";let activityLog=[];
+function loadLog(){try{activityLog=JSON.parse(localStorage.getItem(logKey))||[]}catch(error){activityLog=[]}}
+function saveLog(){localStorage.setItem(logKey,JSON.stringify(activityLog))}
+function renderLog(){document.getElementById("logCount").textContent=activityLog.length===1?"1 saved entry":activityLog.length+" saved entries";const area=document.getElementById("logArea");if(!activityLog.length){area.innerHTML='<div class="empty">no saved entries</div>';return}const rows=activityLog.map(entry=>`<tr><td>${escapeHTML(entry.dateTime)}</td><td>${escapeHTML(entry.type)}</td><td>${escapeHTML(entry.agentId)}</td><td>${escapeHTML(entry.memberPa)}</td><td>${escapeHTML(entry.actionResolution)}</td><td><button class="small" onclick="deleteLogEntry('${entry.id}')">delete</button></td></tr>`).join("");area.innerHTML=`<table><thead><tr><th>date/time</th><th>type</th><th>agt id</th><th>mbr id/pa#</th><th>action/res</th><th>actions</th></tr></thead><tbody>${rows}</tbody></table>`}
+function deleteLogEntry(id){if(!confirm("delete this entry?"))return;activityLog=activityLog.filter(entry=>entry.id!==id);saveLog();renderLog();showStatus("entry deleted")}
+function clearLog(){if(!activityLog.length){alert("there are no saved entries.");return}if(!confirm("clear entire activity log?"))return;activityLog=[];localStorage.removeItem(logKey);renderLog();showStatus("activity log cleared")}
+function popCSV(){if(!activityLog.length){alert("there are no saved entries to download.");return}const rows=[["date/time","type","agt id","mbr id/pa#","action/res"]];activityLog.forEach(entry=>rows.push([entry.dateTime,entry.type,entry.agentId,entry.memberPa,entry.actionResolution]));const csv=rows.map(row=>row.map(csvEscape).join(",")).join("\n");const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});const link=document.createElement("a"),url=URL.createObjectURL(blob);link.href=url;link.download="critter-activity-log-"+new Date().toISOString().split("T")[0]+".csv";document.body.appendChild(link);link.click();document.body.removeChild(link);URL.revokeObjectURL(url);showStatus("csv downloaded")}
+function csvEscape(value){return '"'+String(value||"").replace(/"/g,'""')+'"'}function escapeHTML(value){const div=document.createElement("div");div.textContent=value||"";return div.innerHTML}function showStatus(message){document.getElementById("statusMessage").textContent=message}
+document.addEventListener("DOMContentLoaded",()=>{loadLog();renderLog()});
+</script>
+</body>
+</html>
