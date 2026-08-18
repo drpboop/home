@@ -382,7 +382,8 @@ const critResOptions = {
     {label:"missing pa",text:"added pa as it was not added when case was approved"},
     {label:"addt info",text:"called in regard to outreach . added ai to pending case"},
     {label:"rx restrictions",text:"updated rx restrictions and claims paid"},
-    {label:"extended loading",text:"extended loading dose pa by 2 weeks per pharmacy request"}
+    {label:"extended loading",text:"extended loading dose pa by 2 weeks per pharmacy request . verify updated dates and paid claim"},
+    {label:"quantity limit",text:"quantity limit reviewed . advised plan criteria and next steps"}
   ],
   "form change": [
     {label:"pens to syringe",text:"updated from pens to syringe per request"},
@@ -396,6 +397,12 @@ const critResOptions = {
   "call": [
     {label:"denial call",text:"called to go over denial . reviewed next steps"},
     {label:"approval call",text:"called to go over approval . provided approval information"},
+    {label:"pending review",text:"called to check pending review . reviewed current status and next steps"},
+    {label:"status check",text:"called to check status . reviewed current determination and next steps"},
+    {label:"denial refax",text:"called to request denial letter refax . confirmed fax destination"},
+    {label:"appeal",text:"called regarding appeal or reconsideration . reviewed submission requirements and next steps"},
+    {label:"reject / claim issue",text:"called regarding reject or claim issue . reviewed reject reason and resolution path"},
+    {label:"outreach / missing info",text:"called regarding outreach or missing information . reviewed what is needed and submission route"},
     {label:"xfer to correct lob",text:"xfer to correct lob"},
     {label:"ssa redirect",text:"advised clinical review cannot assist . referred to ssa"}
   ],
@@ -407,7 +414,12 @@ const critResOptions = {
 const providerResOptions = {
   "pa": [
     {label:"intake completed",text:"verbal pa intake completed for {rx}"},
-    {label:"missing info",text:"called regarding missing information"}
+    {label:"missing info",text:"called regarding missing information . reviewed what is needed and submission route"},
+    {label:"status check",text:"called to check pa status . reviewed current determination and next steps"},
+    {label:"approval review",text:"called to review approval . provided approval information"},
+    {label:"denial review",text:"called to review denial . reviewed reason and next steps"},
+    {label:"denial refax",text:"called to request denial letter refax . confirmed fax destination"},
+    {label:"appeal / reconsideration",text:"called regarding appeal or reconsideration . reviewed submission requirements and next steps"}
   ],
   "transfer": [
     {label:"xfer to correct lob",text:"xfer to correct lob"}
@@ -653,6 +665,13 @@ async function copyOutput() {
 
 function clearOutput() {
   document.getElementById("output").innerHTML = "";
+  const resolutionFields = {
+    crit: "c_res",
+    provider: "p_res",
+    cal: "cal_res"
+  };
+  const fieldId = resolutionFields[document.getElementById("formType").value];
+  if (fieldId) document.getElementById(fieldId).value = "";
   saveFormState();
 }
 
